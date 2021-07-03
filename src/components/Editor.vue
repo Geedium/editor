@@ -5,7 +5,7 @@
       <button>U</button>
       <button>I</button>
     </div>
-    <div class="viewport">
+    <div ref="viewport" class="viewport">
       <p class="viewport--p">⠀</p>
     </div>
   </div>
@@ -14,6 +14,32 @@
 <script>
 export default {
   name: "Editor",
+  data() {
+    return {
+      paragraph: {}
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      document.addEventListener("keydown", this.onKeyDown);
+
+      this.$nextTick(() => {
+        this.paragraph = document.createElement('p');
+        this.paragraph.className = 'viewport--p';
+        
+        this.$refs.viewport.focus();
+
+        this.$refs.viewport.appendChild(this.paragraph);
+      });
+    });
+  },
+  methods: {
+    onKeyDown(e) {
+      if(this.paragraph) {
+        this.paragraph.textContent += e.key;
+      }
+    },
+  },
 };
 </script>
 
@@ -24,6 +50,7 @@ export default {
   display: inline-block;
   min-width: 400px;
   overflow: hidden;
+  position: relative;
 }
 .toolbar {
   background: #fbfbfb;
